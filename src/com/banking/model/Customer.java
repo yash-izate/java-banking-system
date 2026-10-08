@@ -1,13 +1,16 @@
 package com.banking.model;
 
 public class Customer {
+
     private String customerId;
     private String name;
     private String email;
     private String phone;
     private String address;
 
-    public Customer(String customerId, String name, String email, String phone, String address) {
+    public Customer(String customerId, String name, String email,
+                    String phone, String address) {
+
         this.customerId = customerId;
         this.name = name;
         this.email = email;
@@ -15,12 +18,12 @@ public class Customer {
         this.address = address;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getCustomerId() {
         return customerId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void updateEmail(String newEmail) {
@@ -32,7 +35,7 @@ public class Customer {
     }
 
     public void displayCustomerDetails() {
-        System.out.println();
+
         System.out.println("=======================================");
         System.out.println("Customer Details");
         System.out.println("=======================================");

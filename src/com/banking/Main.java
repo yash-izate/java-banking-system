@@ -1,49 +1,113 @@
 package com.banking;
 
 import com.banking.model.Account;
+import com.banking.model.CurrentAccount;
 import com.banking.model.Customer;
+import com.banking.model.SavingsAccount;
 import com.banking.service.Bank;
 
 public class Main {
+
     public static void main(String[] args) {
-        Bank sbi = new Bank();
 
-        Customer c1 = new Customer("C001", "Yash", "yash@example.com","9000000001","Nagpur");
-        Customer c2 = new Customer("C002", "Kaushal", "Kaushal@example.com","9000000002","Amravati");
+        // ============================
+        // CUSTOMERS
+        // ============================
 
-        Account a1 = new Account(c1, "1001",10000.88);
-        Account a2 = new Account(c2, "1002",5000.34);
+        Customer c1 = new Customer(
+                "C001",
+                "Yash",
+                "yash@example.com",
+                "9000000001",
+                "Nagpur"
+        );
 
-        // change email of c1
-        c1.updateEmail("yash2003@gmail.com");
-        // change phone of c2
-        c2.updatePhone("9800000002");
-        // deposit 500 in c1
-        a1.deposit(500);
-        // withdraw 500 from c2
-        a2.withdraw(500);
-        // check balance
-        a1.checkBalance();
-        a2.checkBalance();
+        Customer c2 = new Customer(
+                "C002",
+                "Kaushal",
+                "kaushal@example.com",
+                "9000000002",
+                "Amravati"
+        );
 
-        // display c1
-        c1.displayCustomerDetails();
-        a1.displayAccountDetails();
 
-        // display c2
-        c2.displayCustomerDetails();
-        a2.displayAccountDetails();
+        // ============================
+        // ACCOUNTS
+        // ============================
 
-        // add customer
-        sbi.addCustomer(c1);
-        sbi.addCustomer(c2);
+        SavingsAccount savingsAccount =
+                new SavingsAccount(
+                        c1,
+                        "S1001",
+                        10000,
+                        5
+                );
 
-        // add accounts
-        sbi.addAccount(a1);
-        sbi.addAccount(a2);
+        CurrentAccount currentAccount =
+                new CurrentAccount(
+                        c2,
+                        "C1001",
+                        5000,
+                        20000
+                );
 
-        // display all
-        sbi.displayAllAccounts();
-        sbi.displayAllCustomers();
+
+        // ============================
+        // SAVINGS ACCOUNT TEST
+        // ============================
+
+        System.out.println("\n===== SAVINGS ACCOUNT =====");
+
+        savingsAccount.displayAccountDetails();
+
+        savingsAccount.deposit(2000);
+
+        savingsAccount.withdraw(3000);
+
+        savingsAccount.checkBalance();
+
+        savingsAccount.calculateInterest();
+
+
+        // ============================
+        // CURRENT ACCOUNT TEST
+        // ============================
+
+        System.out.println("\n===== CURRENT ACCOUNT =====");
+
+        currentAccount.displayAccountDetails();
+
+        currentAccount.deposit(5000);
+
+        currentAccount.checkBalance();
+
+
+        // ============================
+        // POLYMORPHISM TEST
+        // ============================
+
+        System.out.println("\n===== POLYMORPHISM TEST =====");
+
+        Account account1 = savingsAccount;
+        Account account2 = currentAccount;
+
+        account1.displayAccountDetails();
+        account2.displayAccountDetails();
+
+
+        // ============================
+        // BANK TEST
+        // ============================
+
+        Bank bank = new Bank();
+
+        bank.addCustomer(c1);
+        bank.addCustomer(c2);
+
+        bank.addAccount(savingsAccount);
+        bank.addAccount(currentAccount);
+
+        bank.displayAllCustomers();
+        bank.displayAllAccounts();
     }
 }

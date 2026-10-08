@@ -26,6 +26,7 @@ public class Bank {
     public Customer findCustomer(String customerId) {
 
         for (Customer customer : customers) {
+
             if (customer.getCustomerId().equals(customerId)) {
                 return customer;
             }
@@ -37,6 +38,7 @@ public class Bank {
     public Account findAccount(String accountNumber) {
 
         for (Account account : accounts) {
+
             if (account.getAccountNumber().equals(accountNumber)) {
                 return account;
             }
