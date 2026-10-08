@@ -1,0 +1,1035 @@
+================================================================================
+                    JAVA BANKING MANAGEMENT SYSTEM
+                         OOP LEARNING PROJECT
+================================================================================
+
+PROJECT TYPE
+------------
+Console-Based Java Application
+
+Technology:
+- Core Java
+- IntelliJ IDEA
+- Java Collections
+- Object-Oriented Programming
+
+Currently NOT using:
+- Spring / Spring Boot
+- Database
+- JDBC
+- REST API
+- Hibernate / JPA
+- External libraries
+
+
+================================================================================
+1. PROJECT PURPOSE
+================================================================================
+
+This project is being developed as a Core Java OOP practice project.
+
+The purpose is to build a small but complete banking system while practically
+learning and applying Java fundamentals and Object-Oriented Programming.
+
+The project will gradually cover:
+
+1. Classes and Objects
+2. Constructors
+3. this keyword
+4. Encapsulation
+5. Getters
+6. Composition
+7. Inheritance
+8. Method Overriding
+9. super keyword
+10. Access Modifiers
+11. Polymorphism
+12. Collections
+13. Abstract Classes
+14. Interfaces
+15. Enums
+16. Exception Handling
+17. Custom Exceptions
+18. equals()
+19. hashCode()
+20. toString()
+21. static and final
+22. Service Layer Design
+23. Basic Application Architecture
+
+
+================================================================================
+2. CURRENT PROJECT STRUCTURE
+================================================================================
+
+Java-Banking-System
+│
+├── src
+│   └── com.banking
+│       │
+│       ├── Main.java
+│       │
+│       ├── model
+│       │   ├── Customer.java
+│       │   ├── Account.java
+│       │   ├── SavingsAccount.java
+│       │   └── CurrentAccount.java
+│       │
+│       └── service
+│           └── Bank.java
+│
+└── docs
+    └── flowdiagram.txt
+
+
+================================================================================
+3. CURRENT CLASS STRUCTURE
+================================================================================
+
+                         ┌───────────────────┐
+                         │     Customer      │
+                         ├───────────────────┤
+                         │ - customerId      │
+                         │ - name            │
+                         │ - email           │
+                         │ - phone           │
+                         │ - address         │
+                         ├───────────────────┤
+                         │ + getName()       │
+                         │ + getCustomerId() │
+                         │ + updateEmail()   │
+                         │ + updatePhone()   │
+                         │ + displayDetails()│
+                         └─────────┬─────────┘
+                                   │
+                                   │ HAS-A
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │      Account      │
+                         ├───────────────────┤
+                         │ - accountHolder   │
+                         │ - accountNumber   │
+                         │ - balance         │
+                         ├───────────────────┤
+                         │ + deposit()       │
+                         │ + withdraw()      │
+                         │ + checkBalance()  │
+                         │ + displayDetails()│
+                         └─────────┬─────────┘
+                                   ▲
+                                   │
+                        extends    │    extends
+                  ┌────────────────┴────────────────┐
+                  │                                 │
+                  │                                 │
+        ┌─────────┴──────────┐             ┌────────┴──────────┐
+        │   SavingsAccount   │             │  CurrentAccount   │
+        ├────────────────────┤             ├───────────────────┤
+        │ - interestRate     │             │ - overdraftLimit  │
+        ├────────────────────┤             ├───────────────────┤
+        │ + calculateInterest│             │ + withdraw()      │
+        │ + withdraw()       │             │ + displayDetails()│
+        │ + displayDetails() │             └───────────────────┘
+        └────────────────────┘
+
+
+================================================================================
+4. RELATIONSHIPS BETWEEN CLASSES
+================================================================================
+
+CUSTOMER AND ACCOUNT
+--------------------
+
+Account HAS-A Customer.
+
+Example:
+
+Customer c1 = new Customer(...);
+
+Account a1 = new Account(c1, ...);
+
+
+Relationship:
+
+        ┌───────────────┐
+        │   Customer    │
+        │   object      │
+        └───────▲───────┘
+                │
+                │ reference
+                │
+        ┌───────┴───────┐
+        │    Account    │
+        │    object     │
+        └───────────────┘
+
+
+Meaning:
+
+An Account contains a reference to a Customer object.
+
+It does NOT mean:
+
+Account IS-A Customer.
+
+Therefore Account does NOT extend Customer.
+
+
+================================================================================
+5. INHERITANCE RELATIONSHIP
+================================================================================
+
+SavingsAccount IS-A Account.
+
+CurrentAccount IS-A Account.
+
+Therefore:
+
+                         Account
+                            ▲
+                            │
+               ┌────────────┴────────────┐
+               │                         │
+               │ extends                 │ extends
+               │                         │
+               │                         │
+        SavingsAccount             CurrentAccount
+
+
+This allows both child classes to reuse common Account functionality.
+
+
+================================================================================
+6. ACCOUNT INHERITANCE DETAILS
+================================================================================
+
+                         ACCOUNT
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+        ▼                   ▼                   ▼
+ accountHolder       accountNumber          balance
+        │
+        │
+        ├── deposit()
+        ├── withdraw()
+        ├── checkBalance()
+        └── displayAccountDetails()
+
+
+                    │
+                    │ inherited by
+                    ▼
+
+              SAVINGS ACCOUNT
+
+              Additional:
+              - interestRate
+              - calculateInterest()
+              - specialized withdraw()
+
+
+                    │
+                    │ inherited by
+                    ▼
+
+              CURRENT ACCOUNT
+
+              Additional:
+              - overdraftLimit
+              - specialized withdraw()
+
+
+================================================================================
+7. CUSTOMER CLASS
+================================================================================
+
+Customer represents a bank customer.
+
+Fields:
+
+    private String customerId;
+    private String name;
+    private String email;
+    private String phone;
+    private String address;
+
+
+Constructor:
+
+    Customer(customerId, name, email, phone, address)
+
+
+Methods:
+
+    getCustomerId()
+    getName()
+    updateEmail()
+    updatePhone()
+    displayCustomerDetails()
+
+
+OOP concepts demonstrated:
+
+- Class
+- Object
+- Fields
+- private access
+- Constructor
+- this keyword
+- Encapsulation
+- Getter
+- Instance methods
+
+
+================================================================================
+8. ACCOUNT CLASS
+================================================================================
+
+Account represents a general bank account.
+
+Fields:
+
+    private Customer accountHolder;
+    private String accountNumber;
+    private double balance;
+
+
+Constructor:
+
+    Account(Customer accountHolder,
+            String accountNumber,
+            double balance)
+
+
+Methods:
+
+    getAccountNumber()
+    getBalance()
+    deposit()
+    withdraw()
+    checkBalance()
+    displayAccountDetails()
+
+
+Additional protected method:
+
+    protected void reduceBalance(double amount)
+
+
+Purpose of reduceBalance():
+
+Allows subclasses to modify the balance through controlled behavior
+without directly accessing the private balance field.
+
+
+================================================================================
+9. SAVINGS ACCOUNT
+================================================================================
+
+SavingsAccount extends Account.
+
+Additional field:
+
+    private double interestRate;
+
+
+Constructor:
+
+    SavingsAccount(
+        Customer accountHolder,
+        String accountNumber,
+        double balance,
+        double interestRate
+    )
+
+
+Additional method:
+
+    calculateInterest()
+
+
+Formula:
+
+    Interest = Balance × Interest Rate / 100
+
+
+Example:
+
+    Balance = 10,000
+    Interest Rate = 5%
+
+    Interest = 10,000 × 5 / 100
+            = 500
+
+
+Savings Account withdrawal rule:
+
+    Minimum balance = 1,000
+
+Example:
+
+    Balance = 10,000
+    Withdrawal = 8,000
+    Remaining = 2,000
+
+    Allowed
+
+
+    Balance = 10,000
+    Withdrawal = 9,500
+    Remaining = 500
+
+    Not Allowed
+
+
+SavingsAccount overrides:
+
+    withdraw()
+
+    displayAccountDetails()
+
+
+================================================================================
+10. CURRENT ACCOUNT
+================================================================================
+
+CurrentAccount extends Account.
+
+Additional field:
+
+    private double overdraftLimit;
+
+
+Constructor:
+
+    CurrentAccount(
+        Customer accountHolder,
+        String accountNumber,
+        double balance,
+        double overdraftLimit
+    )
+
+
+Current account supports overdraft.
+
+Example:
+
+    Balance = 5,000
+    Overdraft Limit = 20,000
+
+    Maximum withdrawal:
+    5,000 + 20,000 = 25,000
+
+
+Therefore:
+
+    withdraw(15,000)
+    → Allowed
+
+
+    withdraw(25,000)
+    → Allowed
+
+
+    withdraw(25,001)
+    → Rejected
+
+
+CurrentAccount overrides:
+
+    withdraw()
+
+    displayAccountDetails()
+
+
+================================================================================
+11. CONSTRUCTOR FLOW
+================================================================================
+
+When creating a SavingsAccount:
+
+    new SavingsAccount(c1, "S1001", 10000, 5)
+                       │
+                       ▼
+             SavingsAccount constructor
+                       │
+                       │ super(...)
+                       ▼
+                Account constructor
+                       │
+                       ▼
+             Initialize common fields
+                       │
+                       ▼
+             Initialize interestRate
+                       │
+                       ▼
+             SavingsAccount object
+
+
+When creating a CurrentAccount:
+
+    new CurrentAccount(c2, "C1001", 5000, 20000)
+                       │
+                       ▼
+             CurrentAccount constructor
+                       │
+                       │ super(...)
+                       ▼
+                Account constructor
+                       │
+                       ▼
+             Initialize common fields
+                       │
+                       ▼
+             Initialize overdraftLimit
+                       │
+                       ▼
+             CurrentAccount object
+
+
+================================================================================
+12. super() CONCEPT
+================================================================================
+
+Child classes use:
+
+    super(accountHolder, accountNumber, balance);
+
+
+Purpose:
+
+    Calls the constructor of the parent class.
+
+Parent:
+
+    Account
+
+Child:
+
+    SavingsAccount
+    CurrentAccount
+
+
+Flow:
+
+    SavingsAccount constructor
+             │
+             ▼
+        super(...)
+             │
+             ▼
+       Account constructor
+             │
+             ▼
+      common fields initialized
+
+
+The child only initializes its own additional fields.
+
+
+================================================================================
+13. METHOD OVERRIDING
+================================================================================
+
+Parent class:
+
+    Account
+
+    public void withdraw(double amount)
+
+
+SavingsAccount:
+
+    @Override
+    public void withdraw(double amount)
+
+
+CurrentAccount:
+
+    @Override
+    public void withdraw(double amount)
+
+
+This means:
+
+    Same method name
+    Same parameters
+    Different implementation in child class
+
+
+Concept:
+
+    METHOD OVERRIDING
+
+
+Purpose:
+
+Allows child classes to provide specialized behavior.
+
+
+================================================================================
+14. ACCESS MODIFIERS
+================================================================================
+
+private
+-------
+
+Used for internal object state.
+
+Example:
+
+    private double balance;
+
+
+Only Account can directly access balance.
+
+
+public
+------
+
+Used when functionality should be available to other classes.
+
+Examples:
+
+    public void deposit()
+    public void withdraw()
+    public double getBalance()
+
+
+protected
+---------
+
+Used for controlled access by subclasses.
+
+Example:
+
+    protected void reduceBalance(double amount)
+
+
+CurrentAccount can call:
+
+    reduceBalance(amount);
+
+
+But it cannot directly access:
+
+    balance
+
+
+because balance is private.
+
+
+================================================================================
+15. ENCAPSULATION
+================================================================================
+
+Account contains:
+
+    private double balance;
+
+
+Other classes cannot directly do:
+
+    account.balance = 50000;
+
+
+Instead, controlled methods are provided:
+
+    deposit()
+    withdraw()
+    getBalance()
+
+
+The object controls how its internal state changes.
+
+
+Concept:
+
+    ENCAPSULATION
+
+
+Basic idea:
+
+    Hide internal state
+           +
+    expose controlled behavior
+
+
+================================================================================
+16. POLYMORPHISM
+================================================================================
+
+Java allows:
+
+    Account account1 = new SavingsAccount(...);
+
+    Account account2 = new CurrentAccount(...);
+
+
+Reference type:
+
+    Account
+
+
+Actual objects:
+
+    SavingsAccount
+    CurrentAccount
+
+
+Diagram:
+
+        Account reference
+              │
+       ┌──────┴──────┐
+       │             │
+       ▼             ▼
+ SavingsAccount  CurrentAccount
+    object          object
+
+
+When a method is overridden, Java uses the actual object's implementation
+at runtime.
+
+
+================================================================================
+17. POLYMORPHIC COLLECTION
+================================================================================
+
+Bank contains:
+
+    ArrayList<Account> accounts;
+
+
+This collection can contain:
+
+    Account
+    SavingsAccount
+    CurrentAccount
+
+
+Because:
+
+    SavingsAccount IS-A Account
+    CurrentAccount IS-A Account
+
+
+Diagram:
+
+                 ArrayList<Account>
+                        │
+             ┌──────────┼──────────┐
+             │          │          │
+             ▼          ▼          ▼
+          Account   SavingsAccount CurrentAccount
+
+
+This means Bank does not need separate collections for every account type.
+
+
+================================================================================
+18. BANK CLASS
+================================================================================
+
+Bank manages customers and accounts.
+
+Fields:
+
+    private ArrayList<Customer> customers;
+    private ArrayList<Account> accounts;
+
+
+Constructor:
+
+    Bank()
+
+
+Methods:
+
+    addCustomer()
+    addAccount()
+    findCustomer()
+    findAccount()
+    displayAllCustomers()
+    displayAllAccounts()
+
+
+Basic architecture:
+
+                     Main
+                      │
+                      ▼
+                     Bank
+                      │
+             ┌────────┴────────┐
+             │                 │
+             ▼                 ▼
+        Customers           Accounts
+             │                 │
+             ▼                 ▼
+         Customer       Account / Child Accounts
+
+
+================================================================================
+19. SEARCH FLOW
+================================================================================
+
+Finding a customer:
+
+    Main
+     │
+     ▼
+    Bank
+     │
+     ▼
+findCustomer("C001")
+     │
+     ▼
+ArrayList<Customer>
+     │
+     ▼
+Loop through customers
+     │
+     ▼
+Compare customerId
+     │
+     ├── Match
+     │     │
+     │     ▼
+     │  return Customer
+     │
+     └── No Match
+           │
+           ▼
+         return null
+
+
+Finding an account works similarly:
+
+    findAccount("S1001")
+             │
+             ▼
+      ArrayList<Account>
+             │
+             ▼
+       Search accountNumber
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+    Found        Not Found
+       │           │
+       ▼           ▼
+    Account       null
+
+
+================================================================================
+20. OBJECT CREATION FLOW
+================================================================================
+
+                         Main
+                          │
+             ┌────────────┼────────────┐
+             │            │            │
+             ▼            ▼            ▼
+          Customer     Customer      Bank
+             │            │            │
+             ▼            ▼            │
+            c1           c2            │
+             │            │            │
+             │            │            │
+             ▼            ▼            │
+       SavingsAccount CurrentAccount    │
+             │            │            │
+             └────────────┴────────────┘
+                          │
+                          ▼
+                    bank.addAccount()
+                          │
+                          ▼
+                  ArrayList<Account>
+
+
+================================================================================
+21. CURRENT OOP CONCEPTS COMPLETED
+================================================================================
+
+[✓] Class
+[✓] Object
+[✓] Fields
+[✓] Methods
+[✓] Constructor
+[✓] Parameterized Constructor
+[✓] this keyword
+[✓] private
+[✓] public
+[✓] protected
+[✓] Encapsulation
+[✓] Getter
+[✓] Composition
+[✓] HAS-A relationship
+[✓] Inheritance
+[✓] IS-A relationship
+[✓] extends
+[✓] super()
+[✓] Method Overriding
+[✓] @Override
+[✓] ArrayList
+[✓] Object references
+[✓] Parent reference / Child object
+[✓] Basic polymorphism
+[✓] Polymorphic collection
+
+
+================================================================================
+22. CONCEPTS NOT YET IMPLEMENTED
+================================================================================
+
+[ ] Runtime polymorphism - deeper practice
+[ ] Abstract classes
+[ ] Abstract methods
+[ ] Interfaces
+[ ] Multiple interfaces
+[ ] Enums
+[ ] Custom exceptions
+[ ] Exception handling
+[ ] equals()
+[ ] hashCode()
+[ ] toString()
+[ ] static
+[ ] final
+[ ] BigDecimal for monetary values
+[ ] Transaction class
+[ ] Transaction history
+[ ] Authentication
+[ ] Console menu
+[ ] Service interfaces
+[ ] Service implementations
+[ ] Input validation
+[ ] Final refactoring
+
+
+================================================================================
+23. PLANNED FINAL APPLICATION FLOW
+================================================================================
+
+                         START
+                           │
+                           ▼
+                 ┌───────────────────┐
+                 │   Main / Console  │
+                 │      Menu         │
+                 └─────────┬─────────┘
+                           │
+          ┌────────────────┼─────────────────┐
+          │                │                 │
+          ▼                ▼                 ▼
+    Customer         Account Operations   Admin
+    Management              │             Operations
+          │                 │
+          │       ┌─────────┼──────────┐
+          │       │         │          │
+          ▼       ▼         ▼          ▼
+       Create   Deposit  Withdraw   Transfer
+       Customer
+          │
+          ▼
+       Customer
+          │
+          ▼
+       Account
+          │
+     ┌────┴─────┐
+     ▼          ▼
+ Savings      Current
+ Account      Account
+     │          │
+     └────┬─────┘
+          ▼
+     Transactions
+          │
+          ▼
+ Transaction History
+          │
+          ▼
+       Reports
+          │
+          ▼
+         EXIT
+
+
+================================================================================
+24. CURRENT ARCHITECTURE SUMMARY
+================================================================================
+
+Main
+ │
+ ▼
+Bank
+ │
+ ├───────────────┐
+ ▼               ▼
+Customer      Account
+                  │
+          ┌───────┴────────┐
+          ▼                ▼
+   SavingsAccount    CurrentAccount
+
+
+Relationships:
+
+Customer
+    ↑
+    │ HAS-A
+    │
+Account
+    ↑
+    │ IS-A
+    │
+    ├── SavingsAccount
+    │
+    └── CurrentAccount
+
+
+================================================================================
+25. KEY OOP LESSONS LEARNED
+================================================================================
+
+1. A class is a blueprint for objects.
+
+2. An object is an instance of a class.
+
+3. A reference variable points to an object.
+
+4. private fields protect internal state.
+
+5. public methods provide controlled access to behavior.
+
+6. A getter provides controlled read access.
+
+7. Composition represents HAS-A relationships.
+
+8. Inheritance represents IS-A relationships.
+
+9. extends creates an inheritance relationship.
+
+10. super() calls the parent constructor.
+
+11. @Override allows a child to provide specialized behavior.
+
+12. private members are not directly accessible from child classes.
+
+13. protected members can provide controlled subclass access.
+
+14. A parent reference can refer to a child object.
+
+15. ArrayList<Account> can store SavingsAccount and CurrentAccount objects.
+
+16. Polymorphism allows common code to work with different child objects.
+
+
+================================================================================
+                         END OF CURRENT DOCUMENTATION
+================================================================================
